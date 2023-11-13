@@ -1,2 +1,0 @@
-# ReactPractice
- openweather, restgithub
