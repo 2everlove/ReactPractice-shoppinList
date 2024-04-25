@@ -1,5 +1,8 @@
+import FetchingModal from "../common/FetchingModal";
+
 import { useRef, useState } from "react";
 import { postAdd } from "../../api/productsApi";
+
 
 const initState = {
     pname: '',
@@ -12,6 +15,8 @@ const AddComponent = () => {
 
     const [product, setProduct] = useState({...initState});
     const uploadRef = useRef();
+
+    const [fetching, setFetching] = useState(false);
 
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value;
@@ -32,11 +37,16 @@ const AddComponent = () => {
 
         console.log(formData);
 
+        setFetching(true);
+
         postAdd(formData);
+
+        setFetching(false);
     }
 
     return (
         <div className="border-2 border-sky-200 mt-10 m-2 p-4">
+            {fetching? <FetchingModal/> : <></>}
             <div className="flex justify-center">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                     <div className="w-1/5 p-6 text-right font-bold">Product Name</div>
