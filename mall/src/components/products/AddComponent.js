@@ -3,7 +3,7 @@ import FetchingModal from "../common/FetchingModal";
 import { useRef, useState } from "react";
 import { postAdd } from "../../api/productsApi";
 import ResultModal from "../common/ResultModal";
-
+import useCustomMove from "../../hooks/useCustomeMove";
 
 const initState = {
     pname: '',
@@ -17,8 +17,12 @@ const AddComponent = () => {
     const [product, setProduct] = useState({...initState});
     const uploadRef = useRef();
 
+    //for FetchingModal
     const [fetching, setFetching] = useState(false);
+    //for ResultModal
     const [result, setResult] = useState(null);
+
+    const {moveToList} = useCustomMove();
 
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value;
@@ -46,9 +50,10 @@ const AddComponent = () => {
             setResult(data.result);
         });
     }
-    
+
     const closeModal = () => {
         setResult(null);
+        moveToList({page:1});
     }
 
     return (
