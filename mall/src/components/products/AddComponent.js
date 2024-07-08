@@ -2,6 +2,7 @@ import FetchingModal from "../common/FetchingModal";
 
 import { useRef, useState } from "react";
 import { postAdd } from "../../api/productsApi";
+import ResultModal from "../common/ResultModal";
 
 
 const initState = {
@@ -17,6 +18,7 @@ const AddComponent = () => {
     const uploadRef = useRef();
 
     const [fetching, setFetching] = useState(false);
+    const [result, setResult] = useState(null);
 
     const handleChangeProduct = (e) => {
         product[e.target.name] = e.target.value;
@@ -39,14 +41,27 @@ const AddComponent = () => {
 
         setFetching(true);
 
-        postAdd(formData);
-
-        setFetching(false);
+        postAdd(formData).then(data => {
+            setFetching(false);
+            setResult(data.result);
+        });
+    }
+    
+    const closeModal = () => {
+        setResult(null);
     }
 
     return (
         <div className="border-2 border-sky-200 mt-10 m-2 p-4">
             {fetching? <FetchingModal/> : <></>}
+            {result?
+                <ResultModal 
+                title={`Product Add Result`}
+                content={`No.${result} Registration completed`}
+                callbackFn={closeModal}
+                />
+                : <></>
+            }
             <div className="flex justify-center">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                     <div className="w-1/5 p-6 text-right font-bold">Product Name</div>
